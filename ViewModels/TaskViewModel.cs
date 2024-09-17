@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
+using Proyecto_Administrador_de_tareas.Data;
 using Proyecto_Administrador_de_tareas.Models;
 using Task = Proyecto_Administrador_de_tareas.Models.Task;
 
@@ -12,16 +14,20 @@ namespace Proyecto_Administrador_de_tareas.ViewModels
     {
         // Colección observable de tareas (para representar en la vista)
         public ObservableCollection<Task> Tasks { get; set; }
+        private TaskDbContext _dbContext;
 
         // Constructor
         public TaskViewModel()
         {
-            Tasks = new ObservableCollection<Task>();
+            _dbContext = new TaskDbContext();
+            Tasks = new ObservableCollection<Task>(_dbContext.Tasks.ToList());
         }
 
         // Métodos para agregar, editar y eliminar tareas
         public void AddTask(Task task)
         {
+            _dbContext.Tasks.Add(task);
+            _dbContext.SaveChanges();
             Tasks.Add(task);
         }
 
