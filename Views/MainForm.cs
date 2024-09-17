@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Proyecto_Administrador_de_tareas.ViewModels;
 using Task = Proyecto_Administrador_de_tareas.Models.Task;
 
 namespace Proyecto_Administrador_de_tareas.Views
