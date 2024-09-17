@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using Proyecto_Administrador_de_tareas.Models;
+using Task = Proyecto_Administrador_de_tareas.Models.Task;
 
 namespace Proyecto_Administrador_de_tareas.ViewModels
 {

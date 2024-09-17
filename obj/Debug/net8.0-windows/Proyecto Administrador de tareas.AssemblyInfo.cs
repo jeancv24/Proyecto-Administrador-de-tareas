@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Proyecto Administrador de tareas")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9afa05f7e67d877924b13dcab19e4e4f34dceef0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b1b66902cd7ab85e64f84fa990acd91ed16b3202")]
 [assembly: System.Reflection.AssemblyProductAttribute("Proyecto Administrador de tareas")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Proyecto Administrador de tareas")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
