@@ -1,0 +1,8 @@
+C:\Users\Jean Carlo\Documents\GitHub\Proyecto-Administrador-de-tareas\obj\Debug\net8.0-windows\Proyecto Administrador de tareas.csproj.AssemblyReference.cache
+C:\Users\Jean Carlo\Documents\GitHub\Proyecto-Administrador-de-tareas\obj\Debug\net8.0-windows\Proyecto_Administrador_de_tareas.Form1.resources
+C:\Users\Jean Carlo\Documents\GitHub\Proyecto-Administrador-de-tareas\obj\Debug\net8.0-windows\Proyecto Administrador de tareas.csproj.GenerateResource.cache
+C:\Users\Jean Carlo\Documents\GitHub\Proyecto-Administrador-de-tareas\obj\Debug\net8.0-windows\Proyecto Administrador de tareas.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Jean Carlo\Documents\GitHub\Proyecto-Administrador-de-tareas\obj\Debug\net8.0-windows\Proyecto Administrador de tareas.AssemblyInfoInputs.cache
+C:\Users\Jean Carlo\Documents\GitHub\Proyecto-Administrador-de-tareas\obj\Debug\net8.0-windows\Proyecto Administrador de tareas.AssemblyInfo.cs
+C:\Users\Jean Carlo\Documents\GitHub\Proyecto-Administrador-de-tareas\obj\Debug\net8.0-windows\Proyecto Administrador de tareas.csproj.CoreCompileInputs.cache
+C:\Users\Jean Carlo\Documents\GitHub\Proyecto-Administrador-de-tareas\obj\Debug\net8.0-windows\Proyecto Administrador de tareas.sourcelink.json
