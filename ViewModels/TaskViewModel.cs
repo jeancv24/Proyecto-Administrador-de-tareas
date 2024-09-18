@@ -26,11 +26,18 @@ namespace Proyecto_Administrador_de_tareas.ViewModels
         }
 
         // Cargar las tareas desde la base de datos en la colección observable
-        private void LoadTasks()
+        public void LoadTasks()
         {
-            var tasksFromDb = _dbContext.Tasks.ToList();
+            var tasksFromDb = _dbContext.Tasks.OrderBy(t => t.DueDate).ToList();
+
             Tasks = new ObservableCollection<Task>(tasksFromDb);
         }
+
+        public Task GetTaskById(int taskId)
+        {
+            return Tasks.FirstOrDefault(t => t.Id == taskId);
+        }
+
 
         // Métodos para agregar, editar y eliminar tareas
         public void AddTask(Task task)
