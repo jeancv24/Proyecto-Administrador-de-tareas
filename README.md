@@ -85,6 +85,8 @@ El DateTimePicker está configurado para solo aceptar fechas a partir del día act
 Componentes Visuales
 Se utiliza WinForms para crear una interfaz simple y amigable. Los componentes incluyen TextBox, ComboBox, DateTimePicker, y DataGridView para visualizar y gestionar las tareas.
 
+Elementos visuales en idioma español
+
 Guía de Estilo de Código
 
 Convenciones de Nombres:
@@ -96,11 +98,14 @@ Constantes: Nombres de constantes en UPPER SNAKE CASE.
 
 Estructura del Código:
 
+Nomengratugra en idioma ingles
 Separar la lógica de negocio del código de la vista.
 Cada método debe realizar una sola tarea. Si un método crece en complejidad, considera dividirlo en varios métodos.
 Los eventos en la vista solo deben delegar el trabajo al ViewModel, manteniendo el código de la vista lo más limpio posible.
 
 Comentarios:
+
+Comentarios en idioma español
 
 Utilizar comentarios siempre que sea posible, pero siendo conciso para entender el codigo sin problemas.
 

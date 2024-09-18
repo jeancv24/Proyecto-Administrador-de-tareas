@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using Proyecto_Administrador_de_tareas.ViewModels;
+﻿using Proyecto_Administrador_de_tareas.ViewModels;
 using Task = Proyecto_Administrador_de_tareas.Models.Task;
 
 namespace Proyecto_Administrador_de_tareas.Views
@@ -15,9 +7,9 @@ namespace Proyecto_Administrador_de_tareas.Views
     {
         private TaskViewModel _viewModel;
         private bool isEditing = false;
-        private int editingTaskId = -1; // Para almacenar el ID de la tarea que se está editando
+        private int editingTaskId = -1; // Almacena el ID de la tarea que se está editando
 
-
+        // Contructor
         public MainForm()
         {
             InitializeComponent();
@@ -31,13 +23,11 @@ namespace Proyecto_Administrador_de_tareas.Views
             // Recargar las tareas desde la base de datos
             _viewModel.LoadTasks();
 
-            // Volver a asignar la fuente de datos al DataGridView para reflejar los cambios
-            taskDataGridView.DataSource = null; // Desvincular la fuente de datos anterior
+            // Reflejar los cambios en en DataGridView
+            taskDataGridView.DataSource = null;
             taskDataGridView.DataSource = _viewModel.Tasks;
             taskDataGridView.Columns["Id"].Visible = false; // Ocultar el ID
-            cmbStatus.SelectedItem = "PENDIENTE";
-
-            taskDataGridView.Columns["Id"].Visible = false; // Ocultar el ID
+            cmbStatus.SelectedItem = "PENDIENTE"; // Estado por defecto
 
             taskDataGridView.Columns["Description"].HeaderText = "Descripción";
             taskDataGridView.Columns["Status"].HeaderText = "Estado";
@@ -46,7 +36,7 @@ namespace Proyecto_Administrador_de_tareas.Views
             taskDataGridView.Columns["Notes"].HeaderText = "Notas";
         }
 
-        // Configurar bindings entre los controles y el ViewModel
+        // Configuraracion entre los controles y el ViewModel
         private void SetupBindings()
         {
             cmbStatus.Items.AddRange(new string[] { "PENDIENTE", "EN PROCESO", "FINALIZADA" });
@@ -56,24 +46,25 @@ namespace Proyecto_Administrador_de_tareas.Views
             dtpDueDate.MinDate = DateTime.Today;
         }
 
+        // Metodos Agregar, Editar y Eliminar
         private void BtnAddTask_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtDescription.Text))
             {
-                MessageBox.Show("La descripción es obligatoria.");
+                MessageBox.Show("La descripción es obligatoria.", "Descripcion", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }else if (cmbStatus.SelectedItem == null)
             {
-                MessageBox.Show("El estatus es obligatorio.");
+                MessageBox.Show("El estatus es obligatorio.", "Estatus", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }else if (cmbPriority.SelectedItem == null)
             {
-                MessageBox.Show("La prioridad es obligatoria.");
+                MessageBox.Show("La prioridad es obligatoria.", "Prioridad", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             try
             {
-                var newTask = new Task
+                var newTask = new Task // Se crea la nueva tarea
                 {
                     Description = txtDescription.Text,
                     Status = cmbStatus.SelectedItem.ToString(),
@@ -82,10 +73,10 @@ namespace Proyecto_Administrador_de_tareas.Views
                     Notes = txtNotes.Text
                 };
 
-                _viewModel.AddTask(newTask);
-                ClearFields(); // Limpiar los campos después de agregar
+                _viewModel.AddTask(newTask); // Se envia al ViewModel
+                ClearFields(); // Limpiar los campos
 
-                BindData();
+                BindData(); // Se recargan los datos
             }
             catch (Exception ex)
             {
@@ -93,12 +84,13 @@ namespace Proyecto_Administrador_de_tareas.Views
             }
         }
 
-        // Método para editar una tarea
+        // Editar una tarea
         private void BtnEditTask_Click(object sender, EventArgs e)
         {
+            // No se puede editar si esta "FINALIZADA"
             if (taskDataGridView.SelectedRows[0].Cells["Status"].Value.ToString() == "PENDIENTE" || taskDataGridView.SelectedRows[0].Cells["Status"].Value.ToString() == "EN PROCESO")
             {
-                // Si no estamos en modo de edición
+                // Si modo de edición
                 if (!isEditing)
                 {
                     if (taskDataGridView.SelectedRows.Count > 0)
@@ -109,8 +101,12 @@ namespace Proyecto_Administrador_de_tareas.Views
                         // Obtener la tarea seleccionada desde el ViewModel
                         var taskToEdit = _viewModel.GetTaskById(editingTaskId);
 
-                        dtpDueDate.MinDate = taskToEdit.DueDate;
-
+                        // Se cambia el MinDate en caso de ser menor a la fecha actual
+                        if (taskToEdit.DueDate < DateTime.Now.Date)
+                        {
+                            dtpDueDate.MinDate = taskToEdit.DueDate;
+                        }
+                        
                         // Llenar los campos con los datos de la tarea seleccionada
                         txtDescription.Text = taskToEdit.Description;
                         cmbStatus.SelectedItem = taskToEdit.Status;
@@ -121,9 +117,10 @@ namespace Proyecto_Administrador_de_tareas.Views
                         // Cambiar el texto del botón a "Guardar"
                         BtnEditTask.Text = "Guardar";
 
-                        // Cambiar el estado a modo edición
+                        // Cambiar el estado a modo edicion
                         isEditing = true;
 
+                        // Botones inabilitados en edicion
                         BtnAddTask.Enabled = false;
                         BtnDeleteTask.Enabled = false;
                     }
@@ -132,12 +129,12 @@ namespace Proyecto_Administrador_de_tareas.Views
                         MessageBox.Show("Por favor selecciona una tarea para editar.");
                     }
                 }
-                // Si estamos en modo de edición (segunda vez que se presiona el botón)
+                // Si modo edicion
                 else
                 {
                     try
                     {
-                        // Crear una nueva tarea con los datos actualizados
+                        // Nueva tarea actualizada
                         var updatedTask = new Task
                         {
                             Description = txtDescription.Text,
@@ -147,19 +144,24 @@ namespace Proyecto_Administrador_de_tareas.Views
                             Notes = txtNotes.Text
                         };
 
-                        // Llamar al ViewModel para guardar los cambios
+                        // Guardar los cambios
                         _viewModel.EditTask(editingTaskId, updatedTask);
-                        ClearFields(); // Limpiar los campos después de guardar
 
-                        // Volver a cargar los datos desde la base de datos
+                        ClearFields(); // Limpiar los campos
+
+                        // Cargar los datos
                         BindData();
 
-                        // Cambiar el estado a no edición
+                        // Estado a no edición
                         isEditing = false;
 
-                        // Cambiar el texto del botón de nuevo a "Editar"
+                        // Se restablece botón de a "Editar"
                         BtnEditTask.Text = "Editar";
 
+                        // Se restablece el MinDate
+                        dtpDueDate.MinDate = DateTime.Now;
+
+                        // Se habilitan los botones
                         BtnAddTask.Enabled = true;
                         BtnDeleteTask.Enabled = true;
                     }
@@ -175,47 +177,48 @@ namespace Proyecto_Administrador_de_tareas.Views
 
         }
 
+        // Eliminar tarea
         private void BtnDeleteTask_Click(object sender, EventArgs e)
         {
-    if (taskDataGridView.SelectedRows.Count > 0)
-    {
-        // Obtener la tarea seleccionada del DataGridView
-        var selectedRow = taskDataGridView.SelectedRows[0];
-        var selectedTask = (Task)selectedRow.DataBoundItem;
-
-        // Verificar si la tarea está en estado "EN PROCESO"
-        if (selectedTask.Status == "EN PROCESO")
-        {
-            // Mostrar mensaje de advertencia
-            MessageBox.Show("No se puede eliminar una tarea en estado 'EN PROCESO'.", "Eliminación no permitida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        }
-        else
-        {
-            // Mostrar un mensaje de confirmación
-            var confirmResult = MessageBox.Show("¿Estás seguro de que deseas eliminar esta tarea?", 
-                                                "Confirmar eliminación", 
-                                                MessageBoxButtons.YesNo, 
-                                                MessageBoxIcon.Question);
-            
-            if (confirmResult == DialogResult.Yes)
+            if (taskDataGridView.SelectedRows.Count > 0)
             {
-                // Llamar al ViewModel para eliminar la tarea
-                _viewModel.DeleteTask(selectedTask.Id);
+                // Tarea seleccionada del DataGridView
+                var selectedRow = taskDataGridView.SelectedRows[0];
+                var selectedTask = (Task)selectedRow.DataBoundItem;
+
+                // Si la tarea esta en estado "EN PROCESO"
+                if (selectedTask.Status == "EN PROCESO")
+                {
+                    // Mostrar mensaje de advertencia
+                    MessageBox.Show("No se puede eliminar una tarea en estado 'EN PROCESO'.", "Eliminación no permitida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                else
+                {
+                    // Mensaje de confirmacion
+                    var confirmResult = MessageBox.Show("¿Estás seguro de que deseas eliminar esta tarea?", 
+                                                    "Confirmar eliminación", 
+                                                    MessageBoxButtons.YesNo, 
+                                                    MessageBoxIcon.Question);
+            
+                    if (confirmResult == DialogResult.Yes)
+                    {
+                        // Eliminar la tarea
+                        _viewModel.DeleteTask(selectedTask.Id);
                 
-                // Refrescar la lista de tareas
-                BindData();
+                        // Refrescar la lista de tareas
+                        BindData();
                 
-                MessageBox.Show("La tarea ha sido eliminada.", "Eliminación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("La tarea ha sido eliminada.", "Eliminación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Por favor, selecciona una tarea para eliminar.");
             }
         }
-    }
-    else
-    {
-        MessageBox.Show("Por favor, selecciona una tarea para eliminar.");
-    }
-        }
 
-        // Método para limpiar los campos del formulario
+        // Limpiar los campos del formulario
         private void ClearFields()
         {
             txtDescription.Clear();

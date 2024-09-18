@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.EntityFrameworkCore;
-using Proyecto_Administrador_de_tareas.Models;
+﻿using Microsoft.EntityFrameworkCore;
 using Task = Proyecto_Administrador_de_tareas.Models.Task;
 
 namespace Proyecto_Administrador_de_tareas.Data
