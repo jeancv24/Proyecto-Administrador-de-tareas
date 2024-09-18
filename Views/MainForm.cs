@@ -34,6 +34,9 @@ namespace Proyecto_Administrador_de_tareas.Views
             taskDataGridView.Columns["Priority"].HeaderText = "Prioridad";
             taskDataGridView.Columns["DueDate"].HeaderText = "Fecha";
             taskDataGridView.Columns["Notes"].HeaderText = "Notas";
+
+            // Filtros
+            LoadDueDates();
         }
 
         // Configuraracion entre los controles y el ViewModel
@@ -44,6 +47,12 @@ namespace Proyecto_Administrador_de_tareas.Views
 
             cmbStatus.SelectedItem = "PENDIENTE";
             dtpDueDate.MinDate = DateTime.Today;
+
+            // Filtros
+            cmbFilterStatus.Items.AddRange(new string[] { "TODO", "PENDIENTE", "EN PROCESO", "FINALIZADA" });
+            cmbFilterPriority.Items.AddRange(new string[] { "TODO", "ALTA", "MEDIA", "BAJA" });
+            cmbFilterStatus.SelectedItem = "TODO";
+            cmbFilterPriority.SelectedItem = "TODO";
         }
 
         // Metodos Agregar, Editar y Eliminar
@@ -77,6 +86,10 @@ namespace Proyecto_Administrador_de_tareas.Views
                 ClearFields(); // Limpiar los campos
 
                 BindData(); // Se recargan los datos
+
+                // Se Restablecen los filtros
+                ClearFilters();
+                ApplyFilters(null, null);
             }
             catch (Exception ex)
             {
@@ -227,6 +240,63 @@ namespace Proyecto_Administrador_de_tareas.Views
             cmbPriority.SelectedIndex = -1;
             dtpDueDate.Value = DateTime.Now;
             txtNotes.Clear();
+        }
+
+        // Aplicar filtros
+        private void ApplyFilters(object sender, EventArgs e)
+        {
+            // Obtener los filtros
+            string selectedStatus = cmbFilterStatus.SelectedItem?.ToString() ?? string.Empty;
+            string selectedPriority = cmbFilterPriority.SelectedItem?.ToString() ?? string.Empty;
+            string selectedDate = cmbFilterDueDate.SelectedItem?.ToString() ?? string.Empty;
+
+            // Aplicar los filtros a la lista
+            var filteredTasks = _viewModel.Tasks.AsEnumerable();
+
+            if (!string.IsNullOrEmpty(selectedStatus) && selectedStatus != "TODO")
+            {
+                filteredTasks = filteredTasks.Where(task => task.Status == selectedStatus);
+            }
+
+            if (!string.IsNullOrEmpty(selectedPriority) && selectedPriority != "TODO")
+            {
+                filteredTasks = filteredTasks.Where(task => task.Priority == selectedPriority);
+            }
+
+            if (!string.IsNullOrEmpty(selectedPriority) && selectedDate != "TODO")
+            {
+                filteredTasks = filteredTasks.Where(task => task.DueDate == DateTime.Parse(selectedDate).Date);
+            }
+
+            // Actualizar el DataGridView
+            taskDataGridView.DataSource = filteredTasks.ToList();
+        }
+
+        private void LoadDueDates()
+        {
+            // Obtener las fechas únicas de las tareas
+            var dueDates = _viewModel.Tasks
+                            .Select(task => task.DueDate.Date) // Seleccionar la fecha
+                            .Distinct() // Eliminar duplicados
+                            .OrderBy(date => date) // Ordenar
+                            .ToList();
+
+            // Cargar las fechas
+            cmbFilterDueDate.Items.Clear();
+            cmbFilterDueDate.Items.AddRange(new string[] { "TODO" });
+            cmbFilterDueDate.Items.AddRange(dueDates.Select(date => date.ToShortDateString()).ToArray());
+            cmbFilterDueDate.SelectedItem = "TODO";
+        }
+
+        private void ClearFilters()
+        {
+            // Restaurar todos los filtros
+            cmbFilterStatus.SelectedItem = "TODO";
+            cmbFilterPriority.SelectedItem = "TODO";
+            cmbFilterDueDate.SelectedItem = "TODO";
+
+            // Mostrar todas las tareas
+            taskDataGridView.DataSource = _viewModel.Tasks.ToList();
         }
     }
 }

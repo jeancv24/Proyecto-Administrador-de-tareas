@@ -37,6 +37,9 @@
             BtnAddTask = new Button();
             BtnEditTask = new Button();
             BtnDeleteTask = new Button();
+            cmbFilterStatus = new ComboBox();
+            cmbFilterPriority = new ComboBox();
+            cmbFilterDueDate = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)taskDataGridView).BeginInit();
             SuspendLayout();
             // 
@@ -117,11 +120,41 @@
             BtnDeleteTask.UseVisualStyleBackColor = true;
             BtnDeleteTask.Click += BtnDeleteTask_Click;
             // 
+            // cmbFilterStatus
+            // 
+            cmbFilterStatus.FormattingEnabled = true;
+            cmbFilterStatus.Location = new Point(826, 39);
+            cmbFilterStatus.Name = "cmbFilterStatus";
+            cmbFilterStatus.Size = new Size(151, 28);
+            cmbFilterStatus.TabIndex = 9;
+            cmbFilterStatus.SelectedValueChanged += ApplyFilters;
+            // 
+            // cmbFilterPriority
+            // 
+            cmbFilterPriority.FormattingEnabled = true;
+            cmbFilterPriority.Location = new Point(669, 39);
+            cmbFilterPriority.Name = "cmbFilterPriority";
+            cmbFilterPriority.Size = new Size(151, 28);
+            cmbFilterPriority.TabIndex = 10;
+            cmbFilterPriority.SelectedValueChanged += ApplyFilters;
+            // 
+            // cmbFilterDueDate
+            // 
+            cmbFilterDueDate.FormattingEnabled = true;
+            cmbFilterDueDate.Location = new Point(512, 39);
+            cmbFilterDueDate.Name = "cmbFilterDueDate";
+            cmbFilterDueDate.Size = new Size(151, 28);
+            cmbFilterDueDate.TabIndex = 11;
+            cmbFilterDueDate.SelectedValueChanged += ApplyFilters;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1027, 554);
+            Controls.Add(cmbFilterDueDate);
+            Controls.Add(cmbFilterPriority);
+            Controls.Add(cmbFilterStatus);
             Controls.Add(BtnDeleteTask);
             Controls.Add(BtnEditTask);
             Controls.Add(BtnAddTask);
@@ -149,5 +182,8 @@
         private Button BtnAddTask;
         private Button BtnEditTask;
         private Button BtnDeleteTask;
+        private ComboBox cmbFilterStatus;
+        private ComboBox cmbFilterPriority;
+        private ComboBox cmbFilterDueDate;
     }
 }
