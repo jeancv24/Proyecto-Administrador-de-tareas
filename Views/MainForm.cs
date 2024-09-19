@@ -47,7 +47,7 @@ namespace Proyecto_Administrador_de_tareas.Views
             cmbPriority.Items.AddRange(new string[] { "ALTA", "MEDIA", "BAJA" });
 
             cmbStatus.SelectedItem = "PENDIENTE";
-            dtpDueDate.MinDate = DateTime.Today;
+            dtpDueDate.MinDate = DateTime.Today.Date;
 
             // Filtros
             cmbFilterStatus.Items.AddRange(new string[] { "TODO", "PENDIENTE", "EN PROCESO", "FINALIZADA" });
@@ -143,6 +143,8 @@ namespace Proyecto_Administrador_de_tareas.Views
                         BtnAddTask.Visible = false;
                         BtnDeleteTask.Visible = false;
 
+                        taskDataGridView.Enabled = false;
+
                         // Etiqueta de edicion
                         LbNewTask.Text = "Editando";
                     }
@@ -176,13 +178,15 @@ namespace Proyecto_Administrador_de_tareas.Views
                             BtnEditTask.Text = "Editar";
 
                             // Se restablece el MinDate
-                            dtpDueDate.MinDate = DateTime.Now;
+                            dtpDueDate.MinDate = DateTime.Now.Date;
 
                             // Se habilitan los botones
                             BtnAddTask.Enabled = true;
                             BtnDeleteTask.Enabled = true;
                             BtnAddTask.Visible = true;
                             BtnDeleteTask.Visible = true;
+
+                            taskDataGridView.Enabled = true;
 
                             // Etiqueta de edicion
                             LbNewTask.Text = "Agregar tarea";
@@ -223,7 +227,7 @@ namespace Proyecto_Administrador_de_tareas.Views
                 else
                 {
                     // Mensaje de confirmacion
-                    var confirmResult = MessageBox.Show("¿Estás seguro de que deseas eliminar esta tarea?",
+                    var confirmResult = MessageBox.Show("¿Estás seguro de que deseas eliminar la tarea "+selectedTask.Description+"?",
                                                     "Confirmar eliminación",
                                                     MessageBoxButtons.YesNo,
                                                     MessageBoxIcon.Question);
@@ -253,7 +257,7 @@ namespace Proyecto_Administrador_de_tareas.Views
             cmbStatus.SelectedItem = "PENDIENTE";
             cmbStatus.SelectedIndex = -1;
             cmbPriority.SelectedIndex = -1;
-            dtpDueDate.Value = DateTime.Now;
+            dtpDueDate.Value = DateTime.Now.Date;
             txtNotes.Clear();
         }
 
@@ -278,9 +282,19 @@ namespace Proyecto_Administrador_de_tareas.Views
                 filteredTasks = filteredTasks.Where(task => task.Priority == selectedPriority);
             }
 
-            if (!string.IsNullOrEmpty(selectedPriority) && selectedDate != "TODO")
+            if (!string.IsNullOrEmpty(selectedDate) && selectedDate != "TODO")
             {
                 filteredTasks = filteredTasks.Where(task => task.DueDate == DateTime.Parse(selectedDate).Date);
+            }
+
+            // Boton para quitar filtros
+            if (selectedStatus == "TODO" && selectedPriority == "TODO" &&  selectedDate == "TODO")
+            {
+                BtnRemoveFilters.Visible = false;
+            }
+            else
+            {
+                BtnRemoveFilters.Visible = true;
             }
 
             // Actualizar el DataGridView
@@ -312,6 +326,39 @@ namespace Proyecto_Administrador_de_tareas.Views
 
             // Mostrar todas las tareas
             taskDataGridView.DataSource = _viewModel.Tasks.ToList();
+        }
+
+        private void taskDataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (taskDataGridView.Columns[e.ColumnIndex].Name == "Status")
+            {
+                if (e.Value.ToString() == "FINALIZADA")
+                {
+                    e.CellStyle.BackColor = Color.LightGreen;
+                    e.CellStyle.SelectionBackColor = Color.LightGreen;
+                    e.CellStyle.SelectionForeColor = Color.Black;
+                    e.CellStyle.ForeColor = Color.Black;
+                }
+            }
+
+            if (taskDataGridView.Columns[e.ColumnIndex].Name == "DueDate")
+            {
+                string status = taskDataGridView.Rows[e.RowIndex].Cells["Status"].Value.ToString();
+
+                if (status != "FINALIZADA" && Convert.ToDateTime(e.Value) < DateTime.Now.Date)
+                {
+                    e.CellStyle.BackColor = Color.LightSalmon;
+                    e.CellStyle.ForeColor = Color.Black;
+                    e.CellStyle.SelectionBackColor = Color.LightSalmon;
+                    e.CellStyle.SelectionForeColor = Color.Black;
+                }
+            }
+        }
+
+        private void BtnRemoveFilters_Click(object sender, EventArgs e)
+        {
+            ClearFilters();
+            BtnRemoveFilters.Visible = false;
         }
     }
 }
