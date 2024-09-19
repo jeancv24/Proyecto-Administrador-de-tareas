@@ -37,13 +37,10 @@ Visual Studio 2019 o superior
 
 ### Instalación de Dependencias
 
-- **DevExpress**: Se utiliza para optimizar la interfaz de usuario mediante controles avanzados. Asegurarse de tener una licencia de DevExpress activa o utilizar la versión de prueba.
-- **EntityFrameworkCore**: Base de datos con SQLite
+- **DevExpress**: Se utiliza para optimizar la interfaz de usuario mediante controles avanzados. Asegurarse de tener una licencia de DevExpress activa o utilizar la versión de prueba. (Instalacion de escritorio hacia Visual Studio)
+- **EntityFrameworkCore**: Base de datos con SQLite (Instalacion a traves de NuGet)
 
 ## Configuración del entorno de desarrollo
-
-1. Instalar las dependencias a través de NuGet:
-
 
 #### Clonar el repositorio:
 
@@ -59,6 +56,8 @@ Visual Studio restaurará automáticamente los paquetes necesarios, incluidos los 
 Configurar la base de datos SQLite:
 
 No es necesario realizar configuraciones adicionales, ya que SQLite está integrado en el proyecto. La base de datos se creará automáticamente al iniciar la aplicación.
+
+Se requiere tener instalado DevExpress en el equipo apuntando hacia Visual Studio.
 
 ### Ejecución del Proyecto
 
