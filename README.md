@@ -35,7 +35,15 @@ Visual Studio 2019 o superior
 
 ## Configuración del Entorno de Desarrollo
 
-Instalación de Dependencias
+### Instalación de Dependencias
+
+- **DevExpress**: Se utiliza para optimizar la interfaz de usuario mediante controles avanzados. Asegurarse de tener una licencia de DevExpress activa o utilizar la versión de prueba.
+- **EntityFrameworkCore**: Base de datos con SQLite
+
+## Configuración del entorno de desarrollo
+
+1. Instalar las dependencias a través de NuGet:
+
 
 #### Clonar el repositorio:
 
